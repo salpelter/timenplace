@@ -1,0 +1,32 @@
+@using global::TimeNPlace.Components.Map.Plugins
+
+@* TODO: add LeafletForBlazor attribution *@
+<section class="timenplace-map-container" aria-label="Map">
+    <Map loadParameters="@_loadParameters"
+         height="100%"
+         width="100%">
+        
+        <MapPlugins>
+            <ZoomControlPlugin
+                Map="@context.map"
+                Position="topright"
+                Enabled="true" />
+            <MapClickPlugin
+                Map="@context.map"
+                L="@context.LeafletCore" /> 
+        </MapPlugins>
+    </Map>
+</section>
+
+@code {
+    private LoadParameters _loadParameters = new()
+    {
+        // TODO: consider dynamically assigning current location
+        location = new Location()
+        {
+            latitude = 41.6938,
+            longitude = 44.8015
+        },
+        zoomLevel = 15
+    };
+}

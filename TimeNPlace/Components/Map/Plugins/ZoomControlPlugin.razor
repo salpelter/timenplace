@@ -1,0 +1,32 @@
+@inject IJSRuntime JS
+
+@code {
+    [Parameter] public IJSObjectReference? Map { get; set; }
+    [Parameter] public string Position { get; set; } = "bottomright";
+    [Parameter] public bool Enabled { get; set; } = true;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender || Map is null)
+            return;
+
+        await JS.InvokeVoidAsync(
+            "eval", """
+                    window.configureZoomControl = function(map, position, enabled) {
+                        if (!map.zoomControl)
+                            return;
+
+                        if (enabled)
+                            map.zoomControl.setPosition(position);
+                        else
+                            map.zoomControl.remove();
+                    };
+                    """);
+
+        await JS.InvokeVoidAsync(
+            "configureZoomControl",
+            Map,
+            Position,
+            Enabled);
+    }
+}

@@ -1,0 +1,27 @@
+﻿<script type="module" src="@Assets["Components/Layout/ReconnectModal.razor.js"]"></script>
+
+<dialog id="components-reconnect-modal" class="timenplace-reconnect-modal" data-nosnippet>
+    <div class="timenplace-reconnect-content">
+        <div class="timenplace-reconnect-indicator" aria-hidden="true"></div>
+        <div>
+            <h2 id="components-reconnect-title" class="timenplace-reconnect-title">Reconnecting</h2>
+            <p id="components-reconnect-message" class="timenplace-reconnect-message">
+                Rejoining the server...
+            </p>
+        </div>
+    </div>
+
+    <div class="timenplace-reconnect-actions">
+        <BbButton
+            id="components-reconnect-button"
+            Variant="ButtonVariant.Outline"
+            Size="ButtonSize.Small">
+            Retry
+        </BbButton>
+        <BbButton
+            id="components-resume-button"
+            Size="ButtonSize.Small">
+            Resume
+        </BbButton>
+    </div>
+</dialog>

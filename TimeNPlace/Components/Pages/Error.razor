@@ -1,0 +1,34 @@
+﻿@page "/error"
+@using System.Diagnostics
+
+<PageTitle>Error</PageTitle>
+
+<main class="timenplace-status-page">
+    <section class="timenplace-status-card" aria-labelledby="error-title">
+        <h1 id="error-title" class="timenplace-status-title timenplace-error-title">
+            Something went wrong
+        </h1>
+        <p class="timenplace-status-message">
+            An error occurred while processing your request.
+        </p>
+
+        @if (ShowRequestId)
+        {
+            <p class="timenplace-status-request">
+                Request ID: <code>@RequestId</code>
+            </p>
+        }
+
+        <BbButton Href="/" Size="ButtonSize.Small">Back to map</BbButton>
+    </section>
+</main>
+
+@code{
+    [CascadingParameter] private HttpContext? HttpContext { get; set; }
+
+    private string? RequestId { get; set; }
+    private bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
+
+    protected override void OnInitialized() =>
+        RequestId = Activity.Current?.Id ?? HttpContext?.TraceIdentifier;
+}

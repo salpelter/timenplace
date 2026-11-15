@@ -1,0 +1,37 @@
+@* TODO: add the future logo as BbAppBar LeadingContent *@
+<BbAppBar Sticky="false"
+          SafeArea="false"
+          Class="timenplace-header">
+    <TitleContent>
+        <div class="timenplace-header-content">
+            <span class="timenplace-brand-name">time'n'place</span>
+
+            <BbNavigationMenu Class="timenplace-navigation"
+                              AdditionalAttributes="@(new Dictionary<string, object> { ["aria-label"] = "Primary navigation" })">
+                <BbNavigationMenuList>
+                    @* TODO: add actual pages *@
+                    <BbNavigationMenuItem>
+                        <BbNavigationMenuLink Href="#" Class="timenplace-navigation-link timenplace-navigation-link-active">
+                            Explore
+                        </BbNavigationMenuLink>
+                    </BbNavigationMenuItem>
+                    <BbNavigationMenuItem>
+                        <BbNavigationMenuLink Href="#" Class="timenplace-navigation-link">
+                            About
+                        </BbNavigationMenuLink>
+                    </BbNavigationMenuItem>
+                    <BbNavigationMenuItem>
+                        <BbNavigationMenuLink Href="#" Class="timenplace-navigation-link">
+                            How it works
+                        </BbNavigationMenuLink>
+                    </BbNavigationMenuItem>
+                    <BbNavigationMenuItem>
+                        <BbNavigationMenuLink Href="#" Class="timenplace-navigation-link">
+                            Credits
+                        </BbNavigationMenuLink>
+                    </BbNavigationMenuItem>
+                </BbNavigationMenuList>
+            </BbNavigationMenu>
+        </div>
+    </TitleContent>
+</BbAppBar>

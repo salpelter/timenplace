@@ -1,0 +1,39 @@
+# Build output
+bin/
+obj/
+
+# NuGet
+packages/
+
+# JetBrains Rider / ReSharper
+.idea/
+_ReSharper.Caches/
+*.sln.iml
+riderModule.iml
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# User-specific ASP.NET Core settings
+appsettings.Local.json
+appsettings.*.local.json
+
+# Secrets and local environment files
+.env
+.env.*
+!.env.example
+
+# Test and coverage output
+TestResults/
+coverage/
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+
+# OpenCode
+opencode.jsonc

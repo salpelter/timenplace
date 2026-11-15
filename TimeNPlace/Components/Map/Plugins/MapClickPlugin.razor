@@ -1,0 +1,73 @@
+@using System.Globalization
+@inject IJSRuntime JS
+@inject HttpClient Http
+
+@implements IAsyncDisposable
+
+@code {
+    [Parameter] public IJSObjectReference? Map { get; set; }
+    [Parameter] public IJSObjectReference? L { get; set; }
+
+    private DotNetObjectReference<MapClickPlugin>? dotNetReference;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        // Console.WriteLine($"Plugin rendered. Map null: {Map is null}, L null: {L is null}");
+
+        if (!firstRender || Map is null || L is null)
+            return;
+
+        // TODO: separate map interaction and API call
+        // TODO: remove extra logging
+        await JS.InvokeVoidAsync(
+            "eval", """
+                    window.enableBlazorMapClick = function (map, L, dotNet) {
+                        console.log("Map click plugin initialized", map, L);
+
+                        let marker = null;
+
+                        map.on('click', function (e) {
+                            console.log("Map clicked", e.latlng);
+
+                            const { lat, lng } = e.latlng.wrap();
+
+                            if (marker) {
+                                marker.setLatLng([lat, lng]);
+                            } else {
+                                marker = L.marker([lat, lng]).addTo(map);
+                            }
+
+                            dotNet.invokeMethodAsync('HandleMapClick', lat, lng);
+                        });
+                    };
+                    """);
+
+        dotNetReference = DotNetObjectReference.Create(this);
+
+        await JS.InvokeVoidAsync(
+            "enableBlazorMapClick",
+            Map,
+            L,
+            dotNetReference);
+    }
+
+    [JSInvokable]
+    public async Task HandleMapClick(double lat, double lng)
+    {
+        // Console.WriteLine($"Clicked: {lat}, {lng}");
+
+        var url = $"api/geosearch?" +
+                  $"lat={lat.ToString(CultureInfo.InvariantCulture)}&" +
+                  $"lng={lng.ToString(CultureInfo.InvariantCulture)}";
+
+        var imageUrl = await Http.GetStringAsync(url);
+
+        Console.WriteLine(imageUrl);
+    }
+
+    public ValueTask DisposeAsync()
+    {
+        dotNetReference?.Dispose();
+        return ValueTask.CompletedTask;
+    }
+}

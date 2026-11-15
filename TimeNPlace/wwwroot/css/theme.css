@@ -1,0 +1,242 @@
+:root {
+    /* Core colors using OKLCH color space */
+    --background: oklch(1 0 0);
+    --foreground: oklch(0.145 0 0);
+    --card: oklch(1 0 0);
+    --card-foreground: oklch(0.145 0 0);
+    --popover: oklch(1 0 0);
+    --popover-foreground: oklch(0.145 0 0);
+    --primary: oklch(0.205 0 0);
+    --primary-foreground: oklch(0.985 0 0);
+    --secondary: oklch(0.97 0 0);
+    --secondary-foreground: oklch(0.205 0 0);
+    --muted: oklch(0.97 0 0);
+    --muted-foreground: oklch(0.556 0 0);
+    --accent: oklch(0.97 0 0);
+    --accent-foreground: oklch(0.205 0 0);
+    --destructive: oklch(0.577 0.245 27.325);
+    --destructive-foreground: oklch(1 0 0);
+    --border: oklch(0.922 0 0);
+    --input: oklch(0.922 0 0);
+    --ring: oklch(0.708 0 0);
+    --radius: 0.625rem;
+}
+
+* {
+    border-color: var(--border);
+}
+
+html,
+body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    background-color: var(--background);
+    color: var(--foreground);
+}
+
+.timenplace-page {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    min-height: 100vh;
+    overflow: hidden;
+    background: #ffffff;
+    color: #202e2b;
+}
+
+.timenplace-header {
+    flex: 0 0 56px;
+    min-height: 56px;
+    z-index: 1;
+    padding: 0 16px;
+}
+
+.timenplace-header > div {
+    min-height: 56px !important;
+    height: 56px;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+.timenplace-header-content {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: 24px;
+}
+
+.timenplace-brand-name {
+    color: #202e2b;
+    font-size: 1.125rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+}
+
+.timenplace-navigation {
+    flex: 0 1 auto;
+}
+
+.timenplace-navigation-link {
+    padding: 8px 12px;
+    font-size: 0.875rem;
+    white-space: nowrap;
+}
+
+.timenplace-navigation-link-active {
+    color: #25675c !important;
+}
+
+.timenplace-search-group,
+.timenplace-search-group input {
+    background-color: #ffffff !important;
+}
+
+.timenplace-map-shell {
+    position: relative;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.timenplace-map-container {
+    width: 100%;
+    height: 100%;
+    min-height: 320px;
+    background: var(--background);
+}
+
+.timenplace-search {
+    position: absolute;
+    z-index: 1000;
+    top: 10px;
+    left: 10px;
+    width: min(386px, calc(100% - 20px));
+}
+
+.timenplace-search-group {
+    width: 100%;
+    box-shadow: 0 4px 20px rgb(31 51 41 / 12%);
+}
+
+.timenplace-reconnect-modal {
+    position: fixed;
+    inset: 0;
+    margin: auto;
+    width: min(360px, calc(100% - 32px));
+    height: fit-content;
+    padding: 20px;
+    border: 1px solid #dfe8e4;
+    border-radius: 14px;
+    background: #ffffff;
+    color: #202e2b;
+    box-shadow: 0 20px 60px rgb(31 51 41 / 20%);
+    font-family: inherit;
+    outline: none;
+}
+
+.timenplace-reconnect-modal::backdrop {
+    background: rgb(31 51 41 / 28%);
+    backdrop-filter: blur(2px);
+}
+
+.timenplace-reconnect-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.timenplace-reconnect-indicator {
+    width: 10px;
+    height: 10px;
+    flex: 0 0 auto;
+    margin-top: 6px;
+    border-radius: 50%;
+    background: #25675c;
+    box-shadow: 0 0 0 5px rgb(37 103 92 / 12%);
+}
+
+.timenplace-reconnect-title {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.timenplace-reconnect-message {
+    margin: 4px 0 0;
+    color: #62736e;
+    font-size: 0.875rem;
+    line-height: 1.4;
+}
+
+.timenplace-reconnect-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 20px;
+}
+
+.timenplace-status-page {
+    display: grid;
+    min-height: 100vh;
+    place-items: center;
+    padding: 24px;
+    background: var(--background);
+    color: #202e2b;
+}
+
+.timenplace-status-card {
+    width: min(420px, 100%);
+    padding: 28px;
+    border: 1px solid #dfe8e4;
+    border-radius: 14px;
+    background: #ffffff;
+    box-shadow: 0 12px 40px rgb(31 51 41 / 10%);
+    text-align: center;
+}
+
+.timenplace-status-title {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    outline: none;
+}
+
+.timenplace-error-title {
+    color: #a33a32;
+}
+
+.timenplace-status-message {
+    margin: 8px 0 20px;
+    color: #62736e;
+    line-height: 1.5;
+}
+
+.timenplace-status-request {
+    margin: -8px 0 20px;
+    color: #62736e;
+    font-size: 0.8125rem;
+}
+
+@media (max-width: 800px) {
+    .timenplace-header {
+        padding: 0 20px;
+    }
+
+    .timenplace-navigation li:nth-child(n + 3) {
+        display: none;
+    }
+
+    .timenplace-header-content {
+        gap: 12px;
+    }
+
+    .timenplace-search {
+        top: 10px;
+        left: 10px;
+        width: min(386px, calc(100% - 20px));
+    }
+}

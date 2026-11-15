@@ -1,0 +1,23 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <base href="/"/>
+    <ResourcePreloader/>
+    <link href="css/theme.css" rel="stylesheet" />
+    <link href="@Assets["_content/BlazorBlueprint.Components/blazorblueprint.css"]" rel="stylesheet" />
+    <ImportMap/>
+    <link rel="icon" type="image/svg" href="favicon.svg"/> @* TODO: adjust size and format *@
+    <HeadOutlet @rendermode="InteractiveServer" />
+    <title>time'n'place</title>
+</head>
+
+<body>
+<Routes @rendermode="InteractiveServer" />
+<ReconnectModal/>
+<script src="@Assets["_framework/blazor.web.js"]"></script>
+</body>
+
+</html>
