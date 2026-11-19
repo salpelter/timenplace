@@ -1,5 +1,5 @@
 @* TODO: implement *@
-<section class="timenplace-search" aria-label="Place search">
+<section class="@GetSearchCssClass()" aria-label="Place search">
     <BbInputGroup Class="timenplace-search-group">
         <BbInputGroupAddon Align="InputGroupAlign.InlineStart">
             <LucideIcon Name="search" Size="16" />
@@ -12,3 +12,14 @@
         </BbInputGroupAddon>
     </BbInputGroup>
 </section>
+
+@code {
+    [Parameter] public bool IsExpanded { get; set; }
+
+    private string GetSearchCssClass()
+    {
+        return IsExpanded
+            ? "timenplace-search timenplace-search-expanded"
+            : "timenplace-search";
+    }
+}

@@ -1,8 +1,8 @@
-@using global::TimeNPlace.Components.Map.Plugins
+@using TimeNPlace.Components.Map.Plugins
 
-@* TODO: add LeafletForBlazor attribution *@
 <section class="timenplace-map-container" aria-label="Map">
     <Map loadParameters="@_loadParameters"
+         OnAfterMapLoaded="@OnAfterMapLoaded"
          height="100%"
          width="100%">
         
@@ -10,15 +10,21 @@
             <ZoomControlPlugin
                 Map="@context.map"
                 Position="topright"
-                Enabled="true" />
+                Enabled="true">
+            </ZoomControlPlugin>
             <MapClickPlugin
                 Map="@context.map"
-                L="@context.LeafletCore" /> 
+                L="@context.LeafletCore"
+                OnMapClick="HandleMapClick">
+            </MapClickPlugin>
         </MapPlugins>
     </Map>
 </section>
 
 @code {
+    [Parameter] public EventCallback<MapClickDetails> OnMapClick { get; set; }
+    private Map? map;
+    
     private LoadParameters _loadParameters = new()
     {
         // TODO: consider dynamically assigning current location
@@ -29,4 +35,25 @@
         },
         zoomLevel = 15
     };
+
+    private async Task HandleMapClick(MapClickDetails details)
+    {
+        await OnMapClick.InvokeAsync(details);
+    }
+
+    public class MapClickDetails
+    {
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+    }
+
+    private async Task OnAfterMapLoaded(MapEventArgs args)
+    {
+        map = args.sender as Map;
+        
+        // LeafletForBlazor attribution
+        await map.Attribution.Add(
+            "<a href=\"https://github.com/ichim/LeafletForBlazor-NuGet\">LeafletForBlazor</a>"
+        );
+    }
 }

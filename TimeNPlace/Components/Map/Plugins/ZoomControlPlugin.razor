@@ -1,4 +1,4 @@
-@inject IJSRuntime JS
+@inject IJSRuntime Js
 
 @code {
     [Parameter] public IJSObjectReference? Map { get; set; }
@@ -10,7 +10,7 @@
         if (!firstRender || Map is null)
             return;
 
-        await JS.InvokeVoidAsync(
+        await Js.InvokeVoidAsync(
             "eval", """
                     window.configureZoomControl = function(map, position, enabled) {
                         if (!map.zoomControl)
@@ -23,7 +23,7 @@
                     };
                     """);
 
-        await JS.InvokeVoidAsync(
+        await Js.InvokeVoidAsync(
             "configureZoomControl",
             Map,
             Position,

@@ -1,8 +1,8 @@
 using System.Text.Json.Serialization;
 
-namespace TimeNPlace.Models.Geosearch;
+namespace TimeNPlace.Models.Geosearch.Response;
 
-public class Coordinate
+public class Coordinates
 {
     [JsonPropertyName("lat")]
     public double Latitude { get; set; }

@@ -1,25 +1,25 @@
-@using System.Globalization
-@inject IJSRuntime JS
-@inject HttpClient Http
+@inject IJSRuntime Js
 
 @implements IAsyncDisposable
 
 @code {
     [Parameter] public IJSObjectReference? Map { get; set; }
     [Parameter] public IJSObjectReference? L { get; set; }
+    [Parameter] public EventCallback<MapContainer.MapClickDetails> OnMapClick { get; set; }
 
     private DotNetObjectReference<MapClickPlugin>? dotNetReference;
 
+    // component lifecycle method called after component has rendered HTML
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        // Console.WriteLine($"Plugin rendered. Map null: {Map is null}, L null: {L is null}");
-
+        // TODO: parent should guarantee that valid map objects exist on the first render of this plugin
+        // initialize only once
         if (!firstRender || Map is null || L is null)
             return;
 
-        // TODO: separate map interaction and API call
-        // TODO: remove extra logging
-        await JS.InvokeVoidAsync(
+        // TODO: don't forget to remove extra logging
+        // TODO: make js function name a variable and rename
+        await Js.InvokeVoidAsync(
             "eval", """
                     window.enableBlazorMapClick = function (map, L, dotNet) {
                         console.log("Map click plugin initialized", map, L);
@@ -42,9 +42,10 @@
                     };
                     """);
 
+        // a proxy representing this particular plugin instance
         dotNetReference = DotNetObjectReference.Create(this);
 
-        await JS.InvokeVoidAsync(
+        await Js.InvokeVoidAsync(
             "enableBlazorMapClick",
             Map,
             L,
@@ -54,20 +55,17 @@
     [JSInvokable]
     public async Task HandleMapClick(double lat, double lng)
     {
-        // Console.WriteLine($"Clicked: {lat}, {lng}");
-
-        var url = $"api/geosearch?" +
-                  $"lat={lat.ToString(CultureInfo.InvariantCulture)}&" +
-                  $"lng={lng.ToString(CultureInfo.InvariantCulture)}";
-
-        var imageUrl = await Http.GetStringAsync(url);
-
-        Console.WriteLine(imageUrl);
+        await OnMapClick.InvokeAsync(new MapContainer.MapClickDetails
+        {
+            Latitude = lat,
+            Longitude = lng
+        });
     }
 
     public ValueTask DisposeAsync()
     {
         dotNetReference?.Dispose();
+        // TODO: should the js handler also be disposed?
         return ValueTask.CompletedTask;
     }
 }

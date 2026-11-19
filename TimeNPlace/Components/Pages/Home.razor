@@ -1,12 +1,134 @@
 ﻿@page "/"
+@using System.Text.Json
+@using TimeNPlace.Models.Geosearch.DTOs
+@using TimeNPlace.Services
+@inject GeosearchService Geosearch
 
-<PageTitle>time'n'place</PageTitle>
+<PageTitle>time'n'place – a new way to discover the world</PageTitle>
 
 <div class="timenplace-page">
     <TimeNPlaceHeader />
 
     <main class="timenplace-map-shell">
-        <PlaceSearch />
-        <MapContainer />
+        @if (_sidebarOpen)
+        {
+            <aside class="timenplace-photo-sidebar" aria-label="Nearby photos panel">
+                <div class="timenplace-photo-sidebar-header">
+                    <SearchBar IsExpanded="true" />
+                    <button type="button"
+                            class="timenplace-close-button"
+                            aria-label="Close photos panel"
+                            @onclick="CloseSidebar">
+                        <LucideIcon Name="x" Size="18" />
+                    </button>
+                </div>
+
+                <div class="timenplace-photo-sidebar-body">
+                    @if (_isLoading)
+                    {
+                        <div class="timenplace-photo-panel-state timenplace-photo-panel-loading"
+                             role="status"
+                             aria-live="polite">
+                            <BbSpinner Size="SpinnerSize.Large"
+                                       AriaLabel="Loading photos"
+                                       Class="text-primary" />
+                            <p class="timenplace-photo-panel-title">Searching for photos</p>
+                        </div>
+                    }
+                    else if (_errorMessageText is not null)
+                    {
+                        <div class="timenplace-photo-panel-state" role="alert">
+                            <p class="timenplace-photo-panel-title">Photo search failed</p>
+                            <p class="timenplace-photo-panel-message">@_errorMessageText</p>
+                        </div>
+                    }
+                    else if (_photos.Count == 0)
+                    {
+                        <div class="timenplace-photo-panel-state">
+                            <p class="timenplace-photo-panel-title">No photos found</p>
+                            <p class="timenplace-photo-panel-message">
+                                Wikimedia did not return any photos for this location.
+                            </p>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="timenplace-photo-list">
+                            @foreach (var photo in _photos)
+                            {
+                                <article class="timenplace-photo-card">
+                                    <div class="timenplace-photo-card-image-container">
+                                        <img class="timenplace-photo-card-image"
+                                             src="@photo.ImageUrl"
+                                             alt="@photo.FileName"
+                                             loading="lazy" />
+                                    </div>
+                                    <div class="timenplace-photo-card-content">
+                                        <h2 class="timenplace-photo-card-title">@photo.FileName</h2>
+                                        <p class="timenplace-photo-card-author">
+                                            @(string.IsNullOrWhiteSpace(photo.Author) ? "Unknown author" : photo.Author)
+                                        </p>
+                                        @* TODO: highlight actual location on hover *@
+                                        @* <p> *@
+                                        @*     @photo.Coordinates.First().Latitude, @photo.Coordinates.First().Longitude *@
+                                        @* </p> *@
+                                        @* TODO: add publication date *@
+                                    </div>
+                                </article>
+                            }
+                        </div>
+                    }
+                </div>
+            </aside>
+        }
+        else
+        {
+            <SearchBar IsExpanded="false" />
+        }
+        
+        <MapContainer OnMapClick="HandleMapClick" />
     </main>
 </div>
+
+@code {
+    private bool _sidebarOpen;
+    private bool _isLoading;
+    private string? _errorMessageText;
+    private List<GeosearchDto> _photos = [];
+
+    private void CloseSidebar()
+    {
+        _sidebarOpen = false;
+        _isLoading = false;
+        _errorMessageText = null;
+        _photos.Clear();
+    }
+
+    private async Task HandleMapClick(MapContainer.MapClickDetails details)
+    {
+        _sidebarOpen = true;
+        _isLoading = true;
+        _errorMessageText = null;
+        _photos.Clear();
+        
+        await InvokeAsync(StateHasChanged); // tells blazor to rerender the component
+        await Task.Yield();
+
+        try
+        {
+            _photos = await Geosearch.GetGeosearchResultsAsync(details.Latitude, details.Longitude);
+        }
+        catch (HttpRequestException)
+        {
+            _errorMessageText = "The photo search could not be completed.";
+        }
+        catch (JsonException)
+        {
+            _errorMessageText = "The photo search returned an invalid response.";
+        }
+        finally
+        {
+            _isLoading = false;
+        }
+    }
+}
