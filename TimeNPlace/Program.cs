@@ -22,14 +22,18 @@ builder.Services.AddScoped(sp =>
     };
 });
 
-// TODO: configure the client here (address, headers, etc.)
-builder.Services.AddHttpClient<GeosearchService>();
+builder.Services.AddHttpClient<GeosearchService>(client =>
+{
+    client.BaseAddress = new Uri("https://commons.wikimedia.org/w/api.php");
+    client.DefaultRequestHeaders.Add("User-Agent", "time-n-place-crawler-bot/0.1 (User: amusable.wick197@passfwd.com)");
+    // TODO: do i need Accept-Encoding: gzip?
+});
 
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Error", createScopeForErrors: true);
+    app.UseExceptionHandler("/error", createScopeForErrors: true);
     // The default HSTS value is 30 days.
     // You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();

@@ -1,7 +1,6 @@
 using System.Text.Json.Serialization;
-using TimeNPlace.Models.Geosearch;
 
-namespace TimeNPlace.Models; // TODO: restructure model folders
+namespace TimeNPlace.Models.Geosearch.Response;
 
 public class GeosearchResponse
 {

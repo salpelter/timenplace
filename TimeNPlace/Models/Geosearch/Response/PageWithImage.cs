@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace TimeNPlace.Models.Geosearch;
+namespace TimeNPlace.Models.Geosearch.Response;
 
 public class PageWithImage
 {
@@ -17,7 +17,7 @@ public class PageWithImage
     public int Index { get; set; }
 
     [JsonPropertyName("coordinates")]
-    public List<Coordinate> Coordinates { get; set; }
+    public List<Coordinates>? Coordinates { get; set; }
 
     [JsonPropertyName("imagerepository")]
     public string ImageRepository { get; set; }

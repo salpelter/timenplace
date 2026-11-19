@@ -1,7 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace TimeNPlace.Models.Geosearch;
+namespace TimeNPlace.Models.Geosearch.Response;
 
 public class ExtMetaData
 {
